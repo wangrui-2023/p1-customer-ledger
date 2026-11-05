@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}客户列表 · 客户台账{% endblock %}
+
+{% block content %}
+<header class="page-header">
+  <div>
+    <h1>客户台账</h1>
+    <p class="muted">共 {{ customers|length }} 条记录</p>
+  </div>
+  <a class="button" href="/customers/new">新增客户</a>
+</header>
+
+<form class="search" method="get" action="/customers">
+  <input type="search" name="q" value="{{ q }}" placeholder="按姓名或手机号搜索">
+  <button type="submit">搜索</button>
+  {% if q %}<a class="link" href="/customers">清除</a>{% endif %}
+</form>
+
+{% if customers %}
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>姓名</th>
+        <th>手机号</th>
+        <th>公司</th>
+        <th>备注</th>
+        <th>创建时间</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for customer in customers %}
+      <tr>
+        <td>{{ customer.id }}</td>
+        <td>{{ customer.name }}</td>
+        <td>{{ customer.phone or "—" }}</td>
+        <td>{{ customer.company or "—" }}</td>
+        <td>{{ customer.note or "—" }}</td>
+        <td>{{ customer.created_at }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<p class="empty">
+  还没有客户记录{% if q %}，没有找到与“{{ q }}”匹配的结果{% endif %}。
+</p>
+{% endif %}
+{% endblock %}
